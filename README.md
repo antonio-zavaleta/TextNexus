@@ -31,21 +31,18 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 ---
 
-## 💻 Usage
+## 💻 Basic Usage
 
-The primary interface for TextNexus is through its command line.
+The primary interface for TextNexus is through its command line, executed via `poetry run`.
 
-*(Usage examples will be added as the CLI is developed)*
+**1. Index a PDF file from your MinIO bucket:**
 
-**1. Index a PDF file:**
 ```sh
-poetry run textnexus index --path /path/to/your/document.pdf
-```
+poetry run python auto_rag/cli.py index your-file-name.pdf
 
-**2. Ask a question:**
-```sh
-poetry run textnexus query "What is the main topic of the document?"
 ```
+For more detailed examples and a full list of commands and options, please see the [**CLI Usage Guide**](docs/CLI_USAGE.md).
+
 
 ---
 
