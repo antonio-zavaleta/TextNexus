@@ -1,6 +1,6 @@
 # TextNexus
 
-TextNexus is a Python-based command-line tool designed to automatically create and manage Retrieval-Augmented Generation (RAG) pipelines. It allows you to ingest PDF documents and ask questions about their content directly from your terminal.
+A modular Python CLI tool to create and run Retrieval-Augmented Generation (RAG) pipelines for your PDFs.
 
 The project is architected to be modular, scalable, and cloud-ready, with a focus on clear development practices and robust testing.
 
@@ -8,14 +8,15 @@ The project is architected to be modular, scalable, and cloud-ready, with a focu
 
 ## 🚀 Getting Started
 
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing.
+Follow these instructions to get the project running on your local machine.
 
 ### Prerequisites
 
 * Python 3.9+
 * [Poetry](https://python-poetry.org/docs/#installation) for dependency management.
+* [Docker](https://docs.docker.com/engine/install/) for running local infrastructure.
 
-### Installation
+### Installation & Setup
 
 1.  **Clone the repository:**
     ```sh
@@ -24,10 +25,11 @@ Follow these instructions to get a copy of the project up and running on your lo
     ```
 
 2.  **Install dependencies:**
-    This project uses Poetry to manage dependencies. Run the following command to create a virtual environment and install the required packages.
     ```sh
     poetry install
     ```
+3.  **Complete the one-time local environment setup:**
+    For detailed instructions on starting the local MinIO server and creating the necessary buckets, please follow the **[Local Development Setup Guide](docs/LOCAL_SETUP.md)**.
 
 ---
 
@@ -35,11 +37,9 @@ Follow these instructions to get a copy of the project up and running on your lo
 
 The primary interface for TextNexus is through its command line, executed via `poetry run`.
 
-**1. Index a PDF file from your MinIO bucket:**
-
+**Index a "folder" of PDF files from your MinIO bucket:**
 ```sh
-poetry run python auto_rag/cli.py index your-file-name.pdf
-
+poetry run python auto_rag/cli.py index transformers/
 ```
 For more detailed examples and a full list of commands and options, please see the [**CLI Usage Guide**](docs/CLI_USAGE.md).
 

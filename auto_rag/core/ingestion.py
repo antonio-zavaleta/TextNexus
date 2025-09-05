@@ -68,42 +68,54 @@ class MinioPDFLoader(BaseIngestion):
             logger.error(f"Failed to connect to MinIO: {e}")
             raise
 
+# ...existing code...
+
     def load(self, source: str) -> List[Document]:
         """
-        Loads a single PDF file from the MinIO bucket.
+        Loads all PDF files from the MinIO bucket whose object names start with the given prefix.
 
         Args:
-            source (str): The object name (filename) of the PDF in the bucket.
+            source (str): The prefix to match PDF files in the bucket.
 
         Returns:
-            List[Document]: A list of Document objects, where each page of
-                            the PDF is a separate Document.
+            List[Document]: A list of Document objects aggregated from all matching PDFs.
         """
-        # A temporary file is needed because PyPDFLoader works with local file paths.
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-            try:
-                logger.info(f"Downloading '{source}' from bucket '{self.bucket_name}'...")
-                # Download the PDF from MinIO to the temporary file
-                response = self.minio_client.get_object(self.bucket_name, source)
-                for d in response.stream(32*1024):
-                    tmp_file.write(d)
-                tmp_file.flush() # Ensure all data is written to the file
-                logger.info(f"Successfully downloaded to temporary file: {tmp_file.name}")
+        all_documents = []
+        try:
+            logger.info(f"Listing objects in bucket '{self.bucket_name}' with prefix '{source}'...")
+            objects = self.minio_client.list_objects(self.bucket_name, prefix=source, recursive=True)
+            pdf_objects = [obj for obj in objects if obj.object_name.lower().endswith(".pdf")]
 
-                # Use LangChain's PyPDFLoader on the temporary local file
-                loader = PyPDFLoader(tmp_file.name)
-                documents = loader.load()
-                logger.info(f"Successfully loaded {len(documents)} pages from '{source}'.")
-                return documents
-
-            except Exception as e:
-                logger.error(f"An error occurred while processing '{source}': {e}")
+            if not pdf_objects:
+                logger.warning(f"No PDF files found with prefix '{source}' in bucket '{self.bucket_name}'.")
                 return []
-            finally:
-                # Clean up the temporary file if it was created
-                if 'response' in locals() and response:
-                    response.close()
-                    response.release_conn()
-                os.remove(tmp_file.name)
-                logger.info(f"Cleaned up temporary file: {tmp_file.name}")
 
+            for obj in pdf_objects:
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
+                    try:
+                        logger.info(f"Downloading '{obj.object_name}' from bucket '{self.bucket_name}'...")
+                        response = self.minio_client.get_object(self.bucket_name, obj.object_name)
+                        for d in response.stream(32*1024):
+                            tmp_file.write(d)
+                        tmp_file.flush()
+                        logger.info(f"Successfully downloaded to temporary file: {tmp_file.name}")
+
+                        loader = PyPDFLoader(tmp_file.name)
+                        documents = loader.load()
+                        logger.info(f"Loaded {len(documents)} pages from '{obj.object_name}'.")
+                        all_documents.extend(documents)
+                    except Exception as e:
+                        logger.error(f"Error processing '{obj.object_name}': {e}")
+                    finally:
+                        if 'response' in locals() and response:
+                            response.close()
+                            response.release_conn()
+                        os.remove(tmp_file.name)
+                        logger.info(f"Cleaned up temporary file: {tmp_file.name}")
+
+            logger.info(f"Total documents loaded from all PDFs: {len(all_documents)}")
+            return all_documents
+
+        except Exception as e:
+            logger.error(f"An error occurred during batch ingestion: {e}")
+            return []
