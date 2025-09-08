@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 langchain-core = "^0.2.10"
 langchain-community = "^0.2.5"
 langsmith = "^0.1.75"
@@ -18,10 +18,12 @@ sqlite-vss = "^0.1.2"
 minio = "^7.2.7"
 python-dotenv = "^1.0.1"
 torch = "^2.3.1"
+nltk = "^3.8.1"
+scikit-learn = "^1.5.0" # We can now use the latest version
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.2"
-pytest-mock = "^3.15.0"
+pytest-mock = "^3.12.0"
 
 [build-system]
 requires = ["poetry-core"]
