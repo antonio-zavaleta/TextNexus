@@ -2,10 +2,11 @@ import logging
 from typing import Optional
 
 import typer
-# It's good practice to import the specific exception we want to handle
-from click.exceptions import Exit
 
-# Import our MinioPDFLoader
+# --- New Imports ---
+from auto_rag.core.embedding import SentenceTransformerModel
+from auto_rag.core.chunking import SemanticTextSplitter
+# --- Existing Imports ---
 from auto_rag.core.ingestion import MinioPDFLoader
 
 # Create a Typer application instance
@@ -16,7 +17,6 @@ app = typer.Typer(
 )
 
 # Get a logger instance for this module
-# We can use this in our commands
 logger = logging.getLogger(__name__)
 
 
@@ -57,7 +57,7 @@ def index(
     ),
 ):
     """
-    Ingest and index a document or a batch of documents from a source.
+    Ingest, chunk, and embed documents from a source.
     """
     # --- Input Validation ---
     if not source and not all_files:
@@ -77,15 +77,14 @@ def index(
         raise typer.Exit(code=1)
 
     target_prefix = "" if all_files else source
-    loader = None # Initialize loader to None
 
-    # --- Pre-computation and Confirmation (outside the main try block) ---
+    # --- Pre-computation and Confirmation ---
     try:
         loader = MinioPDFLoader()
         if all_files and not yes:
             objects_to_process = list(loader.minio_client.list_objects(
-                loader.bucket_name,
-                prefix=target_prefix,
+                loader.bucket_name, 
+                prefix=target_prefix, 
                 recursive=True
             ))
             pdf_count = sum(1 for obj in objects_to_process if obj.object_name.lower().endswith('.pdf'))
@@ -93,9 +92,7 @@ def index(
             if not typer.confirm(f"Found {pdf_count} PDFs. Are you sure you want to process all of them?"):
                 typer.echo("Aborting.")
                 raise typer.Exit()
-    except Exit:
-        # Catch the clean exit from typer.confirm and re-raise it
-        # so it doesn't get caught by the generic Exception handler below.
+    except typer.Exit:
         raise
     except Exception as e:
         logger.error(f"An error occurred during pre-computation: {e}", exc_info=True)
@@ -103,32 +100,43 @@ def index(
         raise typer.Exit(code=1)
 
 
-    # --- Main Ingestion Logic ---
+    # --- Main Pipeline Logic ---
     try:
-        if loader is None: # This should not happen if the above logic is correct
-            loader = MinioPDFLoader()
+        typer.echo("--- Starting Pipeline ---")
 
-        logger.info(f"Starting ingestion for source prefix: '{target_prefix if target_prefix else 'ENTIRE BUCKET'}'")
-        typer.echo(f"Starting ingestion for: {target_prefix if target_prefix else 'ENTIRE BUCKET'}")
-
+        # 1. Ingestion
+        logger.info(f"Step 1: Ingesting documents from prefix: '{target_prefix if target_prefix else 'ENTIRE BUCKET'}'")
         documents = loader.load(target_prefix)
-
         if not documents:
-            warning_message = f"No documents were loaded from prefix '{target_prefix}'. The prefix might be incorrect or contain no PDFs."
+            warning_message = f"No documents were loaded from prefix '{target_prefix}'."
             logger.warning(warning_message)
             typer.secho(f"Warning: {warning_message}", fg=typer.colors.YELLOW)
             raise typer.Exit()
+        logger.info(f"Ingested {len(documents)} pages.")
+        typer.echo(f"Step 1: Ingestion complete. Found {len(documents)} pages.")
 
-        success_message = f"Successfully loaded {len(documents)} pages from the specified source."
+        # 2. Chunking & Embedding
+        logger.info("Step 2: Initializing embedding model and text splitter...")
+        embedding_model = SentenceTransformerModel()
+        splitter = SemanticTextSplitter(embedding_model=embedding_model)
+        
+        logger.info("Step 2: Splitting documents into semantic chunks...")
+        chunks = splitter.split_documents(documents)
+        logger.info(f"Split documents into {len(chunks)} chunks.")
+        typer.echo(f"Step 2: Chunking complete. Created {len(chunks)} semantic chunks.")
+        
+        # In the next epic, these 'chunks' will be passed to the storage component.
+        
+        typer.echo("--- Pipeline Finished Successfully ---")
+        success_message = f"Successfully processed source '{target_prefix if target_prefix else 'ENTIRE BUCKET'}' and created {len(chunks)} chunks."
         logger.info(success_message)
         typer.secho(success_message, fg=typer.colors.GREEN)
 
-    except Exit:
-        # Also catch clean exits from this block
+    except typer.Exit:
         raise
     except Exception as e:
-        logger.error(f"An unhandled error occurred during ingestion: {e}", exc_info=True)
-        typer.secho(f"Error during ingestion: {e}", fg=typer.colors.RED, err=True)
+        logger.error(f"An unhandled error occurred during the pipeline: {e}", exc_info=True)
+        typer.secho(f"Error during pipeline execution: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1)
 
 
