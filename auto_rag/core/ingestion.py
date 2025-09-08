@@ -7,6 +7,8 @@ from typing import List
 from langchain_core.documents import Document
 from langchain_community.document_loaders import PyPDFLoader
 from minio import Minio
+from langsmith import traceable
+
 
 # Import our configuration from the config.py file
 from auto_rag import config
@@ -73,6 +75,7 @@ class MinioPDFLoader(BaseIngestion):
             logger.error(f"Failed to connect to MinIO: {e}")
             raise
 
+    @traceable
     def load(self, source: str) -> List[Document]:
         """
         Loads and preprocesses PDF files from the MinIO bucket based on a prefix.
