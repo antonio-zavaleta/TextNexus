@@ -1,0 +1,137 @@
+import logging
+from typing import Optional
+
+import typer
+# It's good practice to import the specific exception we want to handle
+from click.exceptions import Exit
+
+# Import our MinioPDFLoader
+from auto_rag.core.ingestion import MinioPDFLoader
+
+# Create a Typer application instance
+app = typer.Typer(
+    name="TextNexus",
+    help="A CLI tool to automatically build and run RAG pipelines for your PDFs.",
+    add_completion=False,
+)
+
+# Get a logger instance for this module
+# We can use this in our commands
+logger = logging.getLogger(__name__)
+
+
+@app.callback()
+def main(
+    ctx: typer.Context,
+    verbose: bool = typer.Option(
+        False, "--verbose", "-v", help="Enable verbose logging."
+    ),
+):
+    """
+    Main callback to configure the application state, like logging.
+    This function runs before any command.
+    """
+    log_level = logging.DEBUG if verbose else logging.INFO
+    log_format = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+
+    logging.basicConfig(level=log_level, format=log_format)
+    logger.info(f"Logging configured at level: {logging.getLevelName(log_level)}")
+
+
+@app.command()
+def index(
+    source: Optional[str] = typer.Argument(
+        None,
+        help="The source prefix to index (e.g., 'transformers/')."
+    ),
+    all_files: bool = typer.Option(
+        False,
+        "--all",
+        help="Process all PDF files in the entire bucket."
+    ),
+    yes: bool = typer.Option(
+        False,
+        "--yes",
+        "-y",
+        help="Bypass confirmation prompts for batch operations."
+    ),
+):
+    """
+    Ingest and index a document or a batch of documents from a source.
+    """
+    # --- Input Validation ---
+    if not source and not all_files:
+        typer.secho(
+            "Error: You must specify a SOURCE prefix or use the --all flag.",
+            fg=typer.colors.RED,
+            err=True
+        )
+        raise typer.Exit(code=1)
+
+    if source and all_files:
+        typer.secho(
+            "Error: The SOURCE argument and the --all flag are mutually exclusive.",
+            fg=typer.colors.RED,
+            err=True
+        )
+        raise typer.Exit(code=1)
+
+    target_prefix = "" if all_files else source
+    loader = None # Initialize loader to None
+
+    # --- Pre-computation and Confirmation (outside the main try block) ---
+    try:
+        loader = MinioPDFLoader()
+        if all_files and not yes:
+            objects_to_process = list(loader.minio_client.list_objects(
+                loader.bucket_name,
+                prefix=target_prefix,
+                recursive=True
+            ))
+            pdf_count = sum(1 for obj in objects_to_process if obj.object_name.lower().endswith('.pdf'))
+
+            if not typer.confirm(f"Found {pdf_count} PDFs. Are you sure you want to process all of them?"):
+                typer.echo("Aborting.")
+                raise typer.Exit()
+    except Exit:
+        # Catch the clean exit from typer.confirm and re-raise it
+        # so it doesn't get caught by the generic Exception handler below.
+        raise
+    except Exception as e:
+        logger.error(f"An error occurred during pre-computation: {e}", exc_info=True)
+        typer.secho(f"Error during setup: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1)
+
+
+    # --- Main Ingestion Logic ---
+    try:
+        if loader is None: # This should not happen if the above logic is correct
+            loader = MinioPDFLoader()
+
+        logger.info(f"Starting ingestion for source prefix: '{target_prefix if target_prefix else 'ENTIRE BUCKET'}'")
+        typer.echo(f"Starting ingestion for: {target_prefix if target_prefix else 'ENTIRE BUCKET'}")
+
+        documents = loader.load(target_prefix)
+
+        if not documents:
+            warning_message = f"No documents were loaded from prefix '{target_prefix}'. The prefix might be incorrect or contain no PDFs."
+            logger.warning(warning_message)
+            typer.secho(f"Warning: {warning_message}", fg=typer.colors.YELLOW)
+            raise typer.Exit()
+
+        success_message = f"Successfully loaded {len(documents)} pages from the specified source."
+        logger.info(success_message)
+        typer.secho(success_message, fg=typer.colors.GREEN)
+
+    except Exit:
+        # Also catch clean exits from this block
+        raise
+    except Exception as e:
+        logger.error(f"An unhandled error occurred during ingestion: {e}", exc_info=True)
+        typer.secho(f"Error during ingestion: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1)
+
+
+if __name__ == "__main__":
+    app()
+
