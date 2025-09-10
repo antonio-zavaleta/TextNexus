@@ -163,3 +163,21 @@ TextNexus/
   2. **Initial Implementation (`RecursiveCharacterTextSplitter`):** Use LangChain's built-in `RecursiveCharacterTextSplitter`.
 
 * **CLI Framework:** **Typer**.
+
+## 6. Core Component Deep Dive
+
+### SQLiteVectorStore
+
+The `SQLiteVectorStore` is the concrete implementation of our vector storage for local development.
+
+* **File:** `auto_rag/core/storage.py`
+* **Dependencies:**
+    * It requires an instance of a `BaseEmbeddingModel` to be injected during initialization.
+    * It relies on the `sqlite-vss` Python package and the `numpy` package.
+* **Functionality:**
+    * It connects to a local SQLite database file.
+    * It uses an external `resources/sqlite_schema.sql` file to create two tables:
+        1.  A `chunks` table to store the text content and metadata of each document.
+        2.  A `vss_chunks` virtual table that uses `sqlite-vss` to create a searchable index of the vector embeddings.
+    * The `add_documents` method embeds the incoming documents and stores the text and vectors in their respective tables. Embeddings are stored as raw `BLOB`s.
+    * The `query` method takes a query vector and uses the `vss_search` function to find the most similar documents, returning them as `Document` objects.
