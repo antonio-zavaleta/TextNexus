@@ -21,3 +21,5 @@ LANGCHAIN_TRACING_V2 = os.getenv("LANGCHAIN_TRACING_V2")
 LANGCHAIN_PROJECT = os.getenv("LANGCHAIN_PROJECT")
 LANGCHAIN_API_KEY = os.getenv("LANGCHAIN_API_KEY")
 
+# --- Vector Store Configuration ---
+DB_PATH = PROJECT_ROOT / "data" / "vector_store.db"
