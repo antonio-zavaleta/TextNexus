@@ -29,8 +29,8 @@ Follow these instructions to get the project running on your local machine.
     poetry install
     ```
 3.  **Complete the one-time local environment setup:**
-    For detailed instructions on starting the local MinIO server and creating the necessary buckets, please follow the **[Local Development Setup Guide](docs/LOCAL_SETUP.md)**.
-
+    * For detailed instructions on starting the local MinIO server and creating the necessary buckets, please follow the **[Local Development Setup Guide](docs/LOCAL_SETUP.md)**.
+    * For an overview of the local vector database, see the **[Local Vector Store Setup Guide](docs/LOCAL_VECTOR_STORE_SETUP.md)**.
 ---
 
 ## 💻 Basic Usage
