@@ -114,12 +114,18 @@ class MinioPDFLoader(BaseIngestion):
                     tmp_file.flush()
                     logger.info(f"Downloaded to temporary file: {tmp_file.name}")
 
+
                     # Use LangChain's PyPDFLoader on the temporary local file
                     loader = PyPDFLoader(tmp_file.name)
                     documents = loader.load()
+
+                    # FIX: Overwrite the incorrect source metadata with the real MinIO object name
+                    for doc in documents:
+                        doc.metadata["source"] = obj.object_name
+
                     logger.info(f"Loaded {len(documents)} pages from '{obj.object_name}'.")
 
-                    # *** NEW STEP: Preprocess the loaded documents ***
+                    # Preprocess the loaded documents
                     cleaned_documents = self.preprocessor.clean(documents)
                     logger.info(f"Cleaned {len(cleaned_documents)} pages.")
                     all_documents.extend(cleaned_documents)
