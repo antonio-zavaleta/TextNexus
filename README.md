@@ -33,6 +33,10 @@ Follow these instructions to get the project running on your local machine.
     * For an overview of the local vector database, see the **[Local Vector Store Setup Guide](docs/LOCAL_VECTOR_STORE_SETUP.md)**.
 ---
 
+
+## 💡 Features
+- Query the knowledge base for relevant document chunks using semantic search (`query` command). See [docs/QUERY_INTERFACE.md](docs/QUERY_INTERFACE.md) for details.
+
 ## 💻 Basic Usage
 
 The primary interface for TextNexus is through its command line, executed via `poetry run`.
