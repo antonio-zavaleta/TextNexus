@@ -2,43 +2,38 @@ import logging
 import typer
 from rich.console import Console
 from rich.table import Table
+from auto_rag.utils.retrieval import retrieve_relevant_chunks
 
-# Each command file has its own Typer app instance.
 app = typer.Typer()
 logger = logging.getLogger(__name__)
 console = Console()
 
-
-@app.callback(invoke_without_command=True)
+@app.command()
 def query(
-    ctx: typer.Context, # This context now holds our shared components
+    ctx: typer.Context,
     query_text: str = typer.Argument(..., help="The question to ask the knowledge base."),
     top_k: int = typer.Option(3, "--top-k", "-k", help="The number of relevant chunks to retrieve."),
-):
+) -> None:
     """
     Query the knowledge base for relevant document chunks.
-    """
 
+    This command orchestrates the retrieval process by calling a shared utility
+    function to find the most relevant document chunks based on the user's query.
+
+    Args:
+        ctx (typer.Context): Typer context containing shared components.
+        query_text (str): The user's question or prompt.
+        top_k (int): Number of relevant chunks to retrieve.
+
+    Returns:
+        None. Prints the results to the console.
+    """
     try:
+        logger.info(f"Query called with query_text='{query_text}', top_k={top_k}")
         console.rule(f"[bold green]Executing Query: '{query_text}'[/bold green]")
         
-        # --- Use components from the context (Dependency Injection) ---
-        # We no longer create instances here; we receive them from cli.py
-        embedding_model = ctx.obj.embedding_model
-        vector_store = ctx.obj.vector_store
-        logger.info("Shared components received from context.")
-
-        # 2. Create Query Embedding
-        logger.info(f"Creating embedding for query: '{query_text}'")
-        query_embedding = embedding_model.create_embeddings([query_text])[0]
-        logger.info("Query embedding created.")
-
-        # 3. Search the Vector Store
-        logger.info(f"Searching for top {top_k} most similar chunks...")
-        results = vector_store.query(query_embedding, top_k=top_k)
-        logger.info(f"Found {len(results)} results.")
-
-        # 4. Display Results
+        results = retrieve_relevant_chunks(ctx, query_text, top_k)
+        
         if not results:
             console.print("[bold yellow]Could not find any relevant documents for your query.[/bold yellow]")
             raise typer.Exit(code=0)
@@ -57,8 +52,12 @@ def query(
         
         console.print(table)
 
+    except RuntimeError as e:
+        logger.error(f"Retrieval error: {e}", exc_info=True)
+        typer.secho(f"Error during retrieval: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(code=1)
     except Exception as e:
         logger.error(f"An unhandled error occurred during query: {e}", exc_info=True)
         typer.secho(f"Error during query execution: {e}", fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1)
-
+    
