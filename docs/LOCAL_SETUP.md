@@ -2,6 +2,8 @@
 
 This guide provides step-by-step instructions for setting up the local development environment for TextNexus, which relies on a MinIO object storage server running in Docker.
 
+> **Note for Windows Users:** Windows installation of MinIO requires additional setup steps. We recommend using WSL2 (Windows Subsystem for Linux) for a smoother experience on Windows. Once WSL2 is installed, follow the Linux instructions below.
+
 ## 1. Start the MinIO Server
 
 This project uses a Docker container to run a local, S3-compatible MinIO server.
@@ -20,7 +22,37 @@ This will start the MinIO server and a web console.
 * **Web Console:** `http://localhost:9001`
 * **Credentials:** `minioadmin` / `minioadmin`
 
-## 2. Configure the MinIO Client & Create a Bucket
+## 2. Install and Configure Ollama
+
+TextNexus uses Ollama to run Llama models locally for the RAG pipeline's generation step.
+
+### A. Install Ollama
+
+**Linux and macOS:**
+```bash
+curl https://ollama.ai/install.sh | sh
+```
+
+**Windows Users:** Use WSL2 (Windows Subsystem for Linux) and follow the Linux instructions above.
+
+### B. Start Ollama and Pull Required Model
+
+1. Start the Ollama service:
+   ```bash
+   ollama serve
+   ```
+2. Pull the required model:
+   ```bash
+   ollama pull llama3
+   ```
+3. Verify the installation:
+   ```bash
+   ollama list
+   ```
+
+> **Important:** The Ollama service (`ollama serve`) must be running when using the `generate` command.
+
+## 3. Configure the MinIO Client & Create a Bucket
 
 To create the necessary storage bucket for your PDFs, you'll need the MinIO Client (`mc`).
 

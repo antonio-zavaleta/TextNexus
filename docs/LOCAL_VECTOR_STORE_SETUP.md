@@ -24,4 +24,6 @@ The structure of our vector database is defined in the `resources/sqlite_schema.
 
 * **`vss_chunks`**: This is a **virtual table** controlled by the `sqlite-vss` extension. It is specifically designed to create an efficient index for vector similarity searches. It stores the `embedding` for each chunk as a raw binary `BLOB` and links back to the main `chunks` table using the chunk's ID. The `embedding(384)` definition is critical, as it tells the index that our vectors have 384 dimensions, matching the output of our `all-MiniLM-L6-v2` embedding model.
 
+We chose the `all-MiniLM-L6-v2` model as our default embedding model because it offers an excellent balance of performance and efficiency. With a dimension of 384, it provides strong semantic understanding while being compact enough for fast retrieval. This model has been extensively benchmarked and shows near-SOTA performance on semantic text similarity tasks, despite being significantly smaller and faster than larger models. It's particularly well-suited for RAG applications where quick, accurate semantic matching is crucial.
+
 This setup allows for efficient storage and retrieval. We can perform a fast similarity search on the indexed vectors in `vss_chunks` and then use the resulting IDs to retrieve the full text content and metadata from the main `chunks` table.
