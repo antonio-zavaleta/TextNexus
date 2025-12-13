@@ -83,7 +83,7 @@ def index(
         console.log(f"Step 3: Storage complete. Saved {stats['chunks_stored']} chunks to the database.")
 
         console.rule("[bold green]Pipeline Finished Successfully[/bold green]")
-        success_message = f"Successfully processed source '{target_prefix if target_prefix else 'ENTIRE BUCKET'}' and stored {len(chunks)} chunks in the knowledge base."
+        success_message = f"Successfully processed source '{target_prefix if target_prefix else 'ENTIRE BUCKET'}' and stored {stats['chunks_stored']} chunks in the knowledge base."
         logger.info(success_message)
         typer.secho(success_message, fg=typer.colors.GREEN)
 
