@@ -8,6 +8,7 @@ from rich.console import Console
 from auto_rag.core.embedding import SentenceTransformerModel
 from auto_rag.core.chunking import SemanticTextSplitter
 from auto_rag.core.ingestion import MinioPDFLoader
+from auto_rag.core.ingestion_pipeline import IngestionPipeline
 from auto_rag.core.storage import SQLiteVectorStore
 from auto_rag import config
 
@@ -61,32 +62,28 @@ def index(
         embedding_model = ctx.obj.embedding_model
         vector_store = ctx.obj.vector_store
 
-        # 1. Ingestion (using a new loader instance for the actual operation)
+        # Initialize components
         loader = MinioPDFLoader()
-        logger.info(f"Step 1: Ingesting documents from prefix: '{target_prefix if target_prefix else 'ENTIRE BUCKET'}'")
-        documents = loader.load(target_prefix)
-        if not documents:
+        splitter = SemanticTextSplitter(embedding_model=embedding_model)
+        
+        # Initialize and Run Pipeline
+        pipeline = IngestionPipeline(loader, splitter, vector_store)
+        stats = pipeline.run(target_prefix)
+        
+        # Check results
+        if stats["documents_loaded"] == 0:
             warning_message = f"No documents were loaded from prefix '{target_prefix}'."
             logger.warning(warning_message)
             typer.secho(f"Warning: {warning_message}", fg=typer.colors.YELLOW)
             raise typer.Exit()
-        logger.info(f"Ingested {len(documents)} pages.")
-        console.log(f"Step 1: Ingestion complete. Found {len(documents)} pages.")
 
-        # 2. Chunking
-        splitter = SemanticTextSplitter(embedding_model=embedding_model)
-        logger.info("Step 2: Splitting documents into semantic chunks...")
-        chunks = splitter.split_documents(documents)
-        logger.info(f"Split documents into {len(chunks)} chunks.")
-        console.log(f"Step 2: Chunking complete. Created {len(chunks)} semantic chunks.")
-        
-        # 3. Storage
-        logger.info("Step 3: Adding chunks to the vector store...")
-        vector_store.add_documents(chunks)
-        console.log(f"Step 3: Storage complete. Saved {len(chunks)} chunks to the database.")
+        # Log completion stats
+        console.log(f"Step 1: Ingestion complete. Found {stats['documents_loaded']} pages.")
+        console.log(f"Step 2: Chunking complete. Created {stats['chunks_created']} semantic chunks.")
+        console.log(f"Step 3: Storage complete. Saved {stats['chunks_stored']} chunks to the database.")
 
         console.rule("[bold green]Pipeline Finished Successfully[/bold green]")
-        success_message = f"Successfully processed source '{target_prefix if target_prefix else 'ENTIRE BUCKET'}' and stored {len(chunks)} chunks in the knowledge base."
+        success_message = f"Successfully processed source '{target_prefix if target_prefix else 'ENTIRE BUCKET'}' and stored {stats['chunks_stored']} chunks in the knowledge base."
         logger.info(success_message)
         typer.secho(success_message, fg=typer.colors.GREEN)
 

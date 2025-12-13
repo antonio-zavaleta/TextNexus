@@ -1,0 +1,222 @@
+{
+    "project_title": "TextNexus V2.0: RAG 2.0 & Evaluation",
+    "themes": [
+        {
+            "title": "Robust Document Understanding",
+            "epics": [
+                {
+                    "title": "A. Structured Ingestion Pipeline",
+                    "stories": [
+                        {
+                            "title": "A.1: Implement GraniteDoclingLoader",
+                            "labels": [
+                                "v2.0",
+                                "ingestion",
+                                "high-risk",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "C.1: Create Standardized Test Dataset"
+                            ],
+                            "tasks": [
+                                "A.1.1.1: Setup Docling Dependencies",
+                                "A.1.1.2: Create VLM Conversion Utility",
+                                "A.1.1.3: Implement GraniteDoclingLoader.load() Logic (Draft)",
+                                "A.1.1.4: Map VLM Output to Document Objects"
+                            ]
+                        },
+                        {
+                            "title": "A.2: Create StructuredTextSplitter",
+                            "labels": [
+                                "v2.0",
+                                "ingestion",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "A.1: Implement GraniteDoclingLoader"
+                            ],
+                            "tasks": [
+                                "A.2.1: Implement Markdown Table Chunking",
+                                "A.2.2: Preserve metadata during chunking"
+                            ]
+                        },
+                        {
+                            "title": "A.3: Update index CLI for VLM Choice",
+                            "labels": [
+                                "v2.0",
+                                "cli",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "A.1: Implement GraniteDoclingLoader",
+                                "A.2: Create StructuredTextSplitter"
+                            ],
+                            "tasks": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "Hybrid Retrieval and Indexing",
+            "epics": [
+                {
+                    "title": "B. Hybrid Search Implementation",
+                    "stories": [
+                        {
+                            "title": "B.1: Integrate Sparse Indexing with Storage",
+                            "labels": [
+                                "v2.0",
+                                "retrieval",
+                                "db",
+                                "story"
+                            ],
+                            "tasks": [
+                                "B.1.1.1: Define Sparse Indexing Logic",
+                                "B.1.1.2: Update SQLiteVectorStore.add_documents()",
+                                "B.1.1.3: Implement sparse_query Method",
+                                "B.1.1.4: Unit Test Sparse Indexing/Query"
+                            ]
+                        },
+                        {
+                            "title": "B.2: Develop HybridRetriever",
+                            "labels": [
+                                "v2.0",
+                                "retrieval",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "B.1: Integrate Sparse Indexing with Storage",
+                                "A.3: Update index CLI for VLM Choice"
+                            ],
+                            "tasks": [
+                                "B.2.1: Implement Reciprocal Rank Fusion (RRF)"
+                            ]
+                        },
+                        {
+                            "title": "B.3: Update query and generate CLIs",
+                            "labels": [
+                                "v2.0",
+                                "cli",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "B.2: Develop HybridRetriever"
+                            ],
+                            "tasks": []
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "RAG Evaluation Framework",
+            "epics": [
+                {
+                    "title": "C. Evaluation and Testing Suite",
+                    "stories": [
+                        {
+                            "title": "C.1: Create Standardized Test Dataset",
+                            "labels": [
+                                "v2.0",
+                                "testing",
+                                "story",
+                                "high-risk"
+                            ],
+                            "tasks": [
+                                "C.1.1: Develop table/image-specific questions"
+                            ]
+                        },
+                        {
+                            "title": "C.2: Implement Retrieval Metric Tests",
+                            "labels": [
+                                "v2.0",
+                                "testing",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "C.1: Create Standardized Test Dataset"
+                            ],
+                            "tasks": []
+                        },
+                        {
+                            "title": "C.3: Implement Generation Metric Tests",
+                            "labels": [
+                                "v2.0",
+                                "testing",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "C.1: Create Standardized Test Dataset"
+                            ],
+                            "tasks": [
+                                "C.3.1: Integrate an LLM-as-a-judge (RAGAS)"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "title": "API & Agentic Readiness",
+            "epics": [
+                {
+                    "title": "D. API Decoupling",
+                    "stories": [
+                        {
+                            "title": "D.1: Refactor Ingestion Pipeline to API",
+                            "labels": [
+                                "v2.0",
+                                "api",
+                                "refactor",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "A.3: Update index CLI for VLM Choice"
+                            ],
+                            "tasks": [
+                                "D.1.1: Extract IngestionPipeline class from main/CLI logic",
+                                "D.1.2: Ensure load() and transform() return objects, not void/print",
+                                "D.1.3: Add unit tests for programmatic ingestion"
+                            ]
+                        },
+                        {
+                            "title": "D.2: Refactor Query Engine to API",
+                            "labels": [
+                                "v2.0",
+                                "api",
+                                "refactor",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "B.3: Update query and generate CLIs"
+                            ],
+                            "tasks": [
+                                "D.2.1: Extract QueryEngine class from CLI",
+                                "D.2.2: Implement query() method returning structured results dict",
+                                "D.2.3: Add unit tests for programmatic querying"
+                            ]
+                        },
+                        {
+                            "title": "D.3: Create Client Interface Package",
+                            "labels": [
+                                "v2.0",
+                                "api",
+                                "packaging",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "D.1: Refactor Ingestion Pipeline to API",
+                                "D.2: Refactor Query Engine to API"
+                            ],
+                            "tasks": [
+                                "D.3.1: Create __init__.py exposing high-level classes",
+                                "D.3.2: Verify import textnexus works in external script"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
