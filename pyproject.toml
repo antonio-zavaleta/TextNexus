@@ -26,6 +26,8 @@ ollama = "^0.5.3"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.2"
 pytest-mock = "^3.12.0"
+fpdf2 = "^2.8.5"
+codecarbon = "^3.2.0"
 
 [build-system]
 requires = ["poetry-core"]
