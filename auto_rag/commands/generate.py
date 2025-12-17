@@ -1,7 +1,7 @@
 import typer
 from rich.console import Console
 from auto_rag.llm.connector_registry import LLM_CONNECTORS
-from auto_rag.utils.retrieval import retrieve_relevant_chunks
+
 import logging
 
 
@@ -33,6 +33,7 @@ def generate(
         None. Prints the generated response to the console.
     """
     try:
+        from auto_rag.core.query_engine import QueryEngine
         console.rule(f"[bold green]RAG Generation: '{query_text}'[/bold green]")
 
         connector_class = LLM_CONNECTORS.get(model)
@@ -41,8 +42,17 @@ def generate(
             logger.warning(f"Unsupported model requested: {model}")
             raise typer.Exit(code=1)
 
-        context_docs = retrieve_relevant_chunks(ctx=ctx, query_text=query_text, top_k=top_k)
-        context = "\n\n".join([doc.page_content.strip() for doc in context_docs]) if context_docs else ""
+        # Instantiate QueryEngine
+        engine = QueryEngine(
+            vector_store=ctx.obj.vector_store,
+            embedding_model=ctx.obj.embedding_model
+        )
+        
+        # Execute Query
+        response = engine.query(query_text=query_text, top_k=top_k)
+        context_results = response["results"]
+
+        context = "\n\n".join([item["content"].strip() for item in context_results]) if context_results else ""
         if not context:
             console.print("[bold yellow]Warning: No relevant documents found. Generating a general response.[/bold yellow]")
             logger.info("No relevant documents found for context.")

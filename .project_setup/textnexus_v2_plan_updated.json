@@ -52,6 +52,23 @@
                                 "A.2: Create StructuredTextSplitter"
                             ],
                             "tasks": []
+                        },
+                        {
+                            "title": "A.4: Implement Idempotent Ingestion",
+                            "labels": [
+                                "v2.0",
+                                "ingestion",
+                                "db",
+                                "story"
+                            ],
+                            "dependencies": [
+                                "A.1: Implement GraniteDoclingLoader"
+                            ],
+                            "tasks": [
+                                "A.4.1: Implement Upsert Logic in SQLiteVectorStore",
+                                "A.4.2: Add hash/deduplication check before insertion",
+                                "A.4.3: Verify idempotency with repeated ingestion runs"
+                            ]
                         }
                     ]
                 }

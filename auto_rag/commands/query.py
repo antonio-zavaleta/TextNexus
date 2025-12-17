@@ -2,7 +2,7 @@ import logging
 import typer
 from rich.console import Console
 from rich.table import Table
-from auto_rag.utils.retrieval import retrieve_relevant_chunks
+
 
 app = typer.Typer()
 logger = logging.getLogger(__name__)
@@ -17,8 +17,8 @@ def query(
     """
     Query the knowledge base for relevant document chunks.
 
-    This command orchestrates the retrieval process by calling a shared utility
-    function to find the most relevant document chunks based on the user's query.
+    This command orchestrates the retrieval process by calling the shared
+    QueryEngine to find the most relevant document chunks based on the user's query.
 
     Args:
         ctx (typer.Context): Typer context containing shared components.
@@ -29,10 +29,20 @@ def query(
         None. Prints the results to the console.
     """
     try:
+        from auto_rag.core.query_engine import QueryEngine
+        
         logger.info(f"Query called with query_text='{query_text}', top_k={top_k}")
         console.rule(f"[bold green]Executing Query: '{query_text}'[/bold green]")
         
-        results = retrieve_relevant_chunks(ctx, query_text, top_k)
+        # Instantiate QueryEngine
+        engine = QueryEngine(
+            vector_store=ctx.obj.vector_store,
+            embedding_model=ctx.obj.embedding_model
+        )
+        
+        # Execute Query
+        response = engine.query(query_text, top_k=top_k)
+        results = response["results"]
         
         if not results:
             console.print("[bold yellow]Could not find any relevant documents for your query.[/bold yellow]")
@@ -44,10 +54,10 @@ def query(
         table.add_column("Page", style="green", justify="right")
         table.add_column("Content", style="magenta")
 
-        for doc in results:
-            source = doc.metadata.get('source', 'N/A')
-            page = str(doc.metadata.get('page', 'N/A'))
-            content = " ".join(doc.page_content.strip().split())
+        for item in results:
+            source = item["metadata"].get('source', 'N/A')
+            page = str(item["metadata"].get('page', 'N/A'))
+            content = " ".join(item["content"].strip().split())
             table.add_row(source, page, content)
         
         console.print(table)
