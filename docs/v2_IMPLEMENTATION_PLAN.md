@@ -20,11 +20,13 @@ We will follow a strict **TDD by User Story** workflow for each item in the Spri
 6.  **Sync**: Switch back to `develop` and pull the merged changes before starting the next story.
     *   `git switch develop && git pull origin develop`
 
+7.  **Testing Hygiene**: For manual verification and integration tests, **always recreate the vector DB** to ensure test data matches the expected context and avoid stale embeddings.
+
 ## Sprint Schedule
 
 ### Sprint 1: API & Architecture (Refactoring)
 **Focus**: Decoupling logic from the CLI to enable a programmatic API. This provides a clean foundation for the complex logic in subsequent sprints.
-- **[D.1] Refactor Ingestion Pipeline to API**
+- [x] **[D.1] Refactor Ingestion Pipeline to API**
   - *Goal*: Extract `IngestionPipeline` as a reusable class.
   - *Dependencies*: None
 - **[D.2] Refactor Query Engine to API**
