@@ -60,7 +60,7 @@ We will follow a strict **TDD by User Story** workflow for each item in the Spri
 
 ### Sprint 4: Advanced Ingestion
 **Focus**: refining how we split documents and exposing options in the CLI.
-- **[A.2] Create StructuredTextSplitter**
+- [x] **[A.2] Create StructuredTextSplitter**
   - *Goal*: Smart chunking that preserves markdown tables and metadata.
   - *Dependencies*: A.1 (Sprint 3)
 - **[A.3] Update index CLI for VLM Choice**
