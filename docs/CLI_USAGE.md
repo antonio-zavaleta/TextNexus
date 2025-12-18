@@ -32,7 +32,7 @@ For detailed setup instructions, see the [Local Setup Guide](LOCAL_SETUP.md).
 All TextNexus commands must be prefixed with `poetry run`. This ensures that the application runs inside the correct Python virtual environment with all necessary dependencies installed. The general format is:
 
 ```sh
-poetry run python auto_rag/cli.py [COMMAND] [ARGUMENTS] [OPTIONS]
+poetry run python textnexus/cli.py [COMMAND] [ARGUMENTS] [OPTIONS]
 ```
 
 ## Available Commands
@@ -42,10 +42,10 @@ Index and process PDF documents for the RAG pipeline.
 
 ```sh
 # Index a specific folder of PDFs
-poetry run python auto_rag/cli.py index transformers/
+poetry run python textnexus/cli.py index transformers/
 
 # Index all PDFs in the bucket
-poetry run python auto_rag/cli.py index --all
+poetry run python textnexus/cli.py index --all
 ```
 
 [Detailed Index Command Documentation](commands/INDEX_COMMAND.md)
@@ -55,10 +55,10 @@ Search indexed documents using semantic search.
 
 ```sh
 # Search with default parameters
-poetry run python auto_rag/cli.py query "What is deep learning?"
+poetry run python textnexus/cli.py query "What is deep learning?"
 
 # Search with custom chunk limit
-poetry run python auto_rag/cli.py query "Explain transformers" --top-k 5
+poetry run python textnexus/cli.py query "Explain transformers" --top-k 5
 ```
 
 [Detailed Query Command Documentation](commands/QUERY_COMMAND.md)
@@ -68,10 +68,10 @@ Generate answers using LLM-powered RAG.
 
 ```sh
 # Generate with default parameters
-poetry run python auto_rag/cli.py generate "What is deep learning?"
+poetry run python textnexus/cli.py generate "What is deep learning?"
 
 # Generate with custom model and context size
-poetry run python auto_rag/cli.py generate "Explain neural networks" --model llama2 --top-k 5
+poetry run python textnexus/cli.py generate "Explain neural networks" --model llama2 --top-k 5
 ```
 
 [Detailed Generate Command Documentation](commands/GENERATE_COMMAND.md)

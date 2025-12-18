@@ -5,12 +5,12 @@ import typer
 from rich.console import Console
 
 # Import our core components
-from auto_rag.core.embedding import SentenceTransformerModel
-from auto_rag.core.chunking import SemanticTextSplitter
-from auto_rag.core.ingestion import MinioPDFLoader
-from auto_rag.core.ingestion_pipeline import IngestionPipeline
-from auto_rag.core.storage import SQLiteVectorStore
-from auto_rag import config
+from textnexus.core.embedding import SentenceTransformerModel
+from textnexus.core.chunking import SemanticTextSplitter
+from textnexus.core.ingestion import MinioPDFLoader
+from textnexus.core.ingestion_pipeline import IngestionPipeline
+from textnexus.core.storage import SQLiteVectorStore
+from textnexus import config
 
 # Each command file has its own Typer app instance.
 app = typer.Typer()

@@ -1,4 +1,4 @@
-g# TextNexus
+# TextNexus
 
 A modular Python CLI tool to create and run Retrieval-Augmented Generation (RAG) pipelines for your PDFs.
 
@@ -42,7 +42,7 @@ After installation and MinIO setup, try these commands to see TextNexus in actio
 
 1. **Index your first documents:**
 ```sh
-poetry run python auto_rag/cli.py index artemis
+poetry run python textnexus/cli.py index artemis
 ```
 ```
 Step 1: Ingestion complete. Found 85 pages.
@@ -52,13 +52,13 @@ Step 3: Storage complete. Saved 737 chunks to the database.
 
 2. **Query the knowledge base:**
 ```sh
-poetry run python auto_rag/cli.py query "What is Project Artemis?" --top-k 3
+poetry run python textnexus/cli.py query "What is Project Artemis?" --top-k 3
 ```
 This will show relevant document chunks from your indexed files.
 
 3. **Generate an answer using RAG:**
 ```sh
-poetry run python auto_rag/cli.py generate "Summarize the goals of Project Artemis." --top-k 10
+poetry run python textnexus/cli.py generate "Summarize the goals of Project Artemis." --top-k 10
 ```
 The system will generate a contextual answer based on the indexed documents.
 
@@ -77,12 +77,12 @@ The primary interface for TextNexus is through its command line, executed via `p
 
 **Index a "folder" of PDF files from your MinIO bucket:**
 ```sh
-poetry run python auto_rag/cli.py index transformers/
+poetry run python textnexus/cli.py index transformers/
 ```
 
 **Generate an answer using RAG:**
 ```sh
-poetry run python auto_rag/cli.py generate "What is deep learning?" --top-k 3
+poetry run python textnexus/cli.py generate "What is deep learning?" --top-k 3
 ```
 
 For more detailed examples and a full list of commands and options, please see the [**CLI Usage Guide**](docs/CLI_USAGE.md).

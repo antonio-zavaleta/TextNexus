@@ -1,7 +1,7 @@
 # User Story D.2: Refactor Query Engine to API
 
 ## Goal Description
-Decouple the query logic from the CLI command (`auto_rag/commands/query.py`) into a reusable core class `QueryEngine`. This enables programmatic access to the retrieval engine (User Story D.1 & D.2) while maintaining existing CLI functionality.
+Decouple the query logic from the CLI command (`textnexus/commands/query.py`) into a reusable core class `QueryEngine`. This enables programmatic access to the retrieval engine (User Story D.1 & D.2) while maintaining existing CLI functionality.
 This change also introduces a robust "Human-in-the-Loop" verification phase to prevent regressions.
 
 ## User Review Required
@@ -12,7 +12,7 @@ This change also introduces a robust "Human-in-the-Loop" verification phase to p
 ## Proposed Changes
 
 ### Core Logic
-#### [NEW] [query_engine.py](file:///home/antonio/Documents/py-projects/TextNexus/auto_rag/core/query_engine.py)
+#### [NEW] [query_engine.py](file:///home/antonio/Documents/py-projects/TextNexus/textnexus/core/query_engine.py)
 - **Class**: `QueryEngine`
 - **Methods**: 
     - `__init__(self, vector_store, embedding_model)`: Dependency injection.
@@ -20,17 +20,17 @@ This change also introduces a robust "Human-in-the-Loop" verification phase to p
 - Logic moved here from `utils/retrieval.py`.
 
 ### CLI Commands
-#### [MODIFY] [query.py](file:///home/antonio/Documents/py-projects/TextNexus/auto_rag/commands/query.py)
+#### [MODIFY] [query.py](file:///home/antonio/Documents/py-projects/TextNexus/textnexus/commands/query.py)
 - Instantiate `QueryEngine` from `ctx.obj`.
 - Call `QueryEngine.query()`.
 - Format the returned structured object for `rich` console output.
 
-#### [MODIFY] [generate.py](file:///home/antonio/Documents/py-projects/TextNexus/auto_rag/commands/generate.py)
+#### [MODIFY] [generate.py](file:///home/antonio/Documents/py-projects/TextNexus/textnexus/commands/generate.py)
 - Instantiate `QueryEngine`.
 - Use `QueryEngine.query()` to fetch context for the LLM.
 
 ### Utilities
-#### [DELETE] [retrieval.py](file:///home/antonio/Documents/py-projects/TextNexus/auto_rag/utils/retrieval.py)
+#### [DELETE] [retrieval.py](file:///home/antonio/Documents/py-projects/TextNexus/textnexus/utils/retrieval.py)
 - Function `retrieve_relevant_chunks` is deprecated/removed in favor of `QueryEngine`.
 
 ## Verification Plan

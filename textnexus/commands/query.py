@@ -29,7 +29,7 @@ def query(
         None. Prints the results to the console.
     """
     try:
-        from auto_rag.core.query_engine import QueryEngine
+        from textnexus.core.query_engine import QueryEngine
         
         logger.info(f"Query called with query_text='{query_text}', top_k={top_k}")
         console.rule(f"[bold green]Executing Query: '{query_text}'[/bold green]")

@@ -3,8 +3,8 @@ from unittest.mock import MagicMock
 import numpy as np
 from langchain_core.documents import Document
 
-from auto_rag.core.embedding import BaseEmbeddingModel
-from auto_rag.core.storage import SQLiteVectorStore
+from textnexus.core.embedding import BaseEmbeddingModel
+from textnexus.core.storage import SQLiteVectorStore
 
 # The dimension of the real model we are using
 MODEL_DIMENSION = 384
@@ -133,7 +133,7 @@ def test_add_documents_raises_error_on_db_failure(mock_embedding_model, mocker):
     mock_conn.commit.side_effect = Exception("DB commit failed!")
     
     # Patch sqlite3.connect to return our failing connection
-    mocker.patch("auto_rag.core.storage.sqlite3.connect", return_value=mock_conn)
+    mocker.patch("textnexus.core.storage.sqlite3.connect", return_value=mock_conn)
     # Patch schema loading
     mocker.patch("builtins.open", mocker.mock_open(read_data=""))
     # Patch the vss loader

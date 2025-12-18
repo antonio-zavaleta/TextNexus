@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 from langchain_core.documents import Document
 
 # We are testing a class that doesn't exist yet (RED phase)
-# from auto_rag.core.query_engine import QueryEngine 
+# from textnexus.core.query_engine import QueryEngine 
 # For now, we expect the import to fail, but to write the test structure, 
 #/ we will assume it exists and comment out the import until implementation.
 
@@ -13,7 +13,7 @@ def test_query_engine_initialization():
     mock_embedding = MagicMock()
     
     # This will fail because QueryEngine is not imported/defined
-    from auto_rag.core.query_engine import QueryEngine
+    from textnexus.core.query_engine import QueryEngine
     engine = QueryEngine(vector_store=mock_store, embedding_model=mock_embedding)
     assert engine.vector_store == mock_store
     assert engine.embedding_model == mock_embedding
@@ -31,7 +31,7 @@ def test_query_returns_structured_result():
     ]
     mock_store.query.return_value = mock_docs
 
-    from auto_rag.core.query_engine import QueryEngine
+    from textnexus.core.query_engine import QueryEngine
     engine = QueryEngine(vector_store=mock_store, embedding_model=mock_embedding)
     
     result = engine.query("test query", top_k=2)

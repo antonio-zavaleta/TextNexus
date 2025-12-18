@@ -1,4 +1,4 @@
-from auto_rag.llm.llama_connector import Llama3Connector
+from textnexus.llm.llama_connector import Llama3Connector
 
 LLM_CONNECTORS = {
     "llama3": Llama3Connector,

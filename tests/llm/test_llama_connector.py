@@ -1,5 +1,5 @@
 import pytest
-from auto_rag.llm.llama_connector import Llama3Connector
+from textnexus.llm.llama_connector import Llama3Connector
 
 @pytest.fixture(scope="module")
 def connector() -> Llama3Connector:

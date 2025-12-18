@@ -47,7 +47,7 @@ mc cp ./papers/*.pdf local/raw-pdfs/my-papers/
 
 ## Usage
 ```bash
-poetry run python auto_rag.cli.py index [SOURCE] [OPTIONS]
+poetry run python textnexus.cli.py index [SOURCE] [OPTIONS]
 ```
 
 ## Arguments
@@ -61,22 +61,22 @@ poetry run python auto_rag.cli.py index [SOURCE] [OPTIONS]
 
 ### Index a Specific PDF File
 ```bash
-poetry run python auto_rag/cli.py index transformers/attention_is_all_you_need.pdf
+poetry run python textnexus/cli.py index transformers/attention_is_all_you_need.pdf
 ```
 
 ### Index All PDFs in a "Folder"
 ```bash
-poetry run python auto_rag/cli.py index transformers/
+poetry run python textnexus/cli.py index transformers/
 ```
 
 ### Index All PDFs in the Bucket (Interactive)
 ```bash
-poetry run python auto_rag/cli.py index --all
+poetry run python textnexus/cli.py index --all
 ```
 
 ### Index All PDFs in the Bucket (Non-Interactive)
 ```bash
-poetry run python auto_rag/cli.py index --all -y
+poetry run python textnexus/cli.py index --all -y
 ```
 
 ## How It Works

@@ -5,12 +5,12 @@ from typing import List
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.documents import Document
 
-from auto_rag.core.ingestion_pipeline import IngestionPipeline
-from auto_rag.core.embedding import BaseEmbeddingModel
-from auto_rag.core.storage import SQLiteVectorStore
-from auto_rag.core.chunking import SemanticTextSplitter
-from auto_rag.core.ingestion import BaseIngestion
-from auto_rag import config
+from textnexus.core.ingestion_pipeline import IngestionPipeline
+from textnexus.core.embedding import BaseEmbeddingModel
+from textnexus.core.storage import SQLiteVectorStore
+from textnexus.core.chunking import SemanticTextSplitter
+from textnexus.core.ingestion import BaseIngestion
+from textnexus import config
 
 # Custom Loader for local files
 class LocalFileLoader(BaseIngestion):

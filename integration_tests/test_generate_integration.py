@@ -1,6 +1,6 @@
 import pytest
 from typer.testing import CliRunner
-from auto_rag.cli import app
+from textnexus.cli import app
 
 @pytest.fixture
 def cli_runner():
@@ -19,16 +19,16 @@ def test_generate_command_success(mocker, cli_runner):
     """
     # Mock the return value of the retrieval utility function
 
-    class DummyDoc:
-        def __init__(self, content):
-            self.page_content = content
-
+    # Mock the QueryEngine.query method
     mocker.patch(
-        "auto_rag.utils.retrieval.retrieve_relevant_chunks",
-        return_value=[
-            DummyDoc("This is a relevant document chunk."),
-            DummyDoc("This is another relevant chunk."),
-        ]
+        "textnexus.core.query_engine.QueryEngine.query",
+        return_value={
+            "results": [
+                {"content": "This is a relevant document chunk.", "metadata": {}},
+                {"content": "This is another relevant chunk.", "metadata": {}},
+            ],
+            "count": 2
+        }
     )
 
     # Mock the Ollama API response

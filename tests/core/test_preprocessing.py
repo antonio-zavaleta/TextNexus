@@ -1,6 +1,6 @@
 import pytest
 from langchain_core.documents import Document
-from auto_rag.core.preprocessing import BasicTextCleaner
+from textnexus.core.preprocessing import BasicTextCleaner
 
 # A pytest fixture to create a reusable instance of our cleaner for tests
 @pytest.fixture
