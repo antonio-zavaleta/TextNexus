@@ -50,7 +50,7 @@ We will follow a strict **TDD by User Story** workflow for each item in the Spri
 - [x] **[A.1] Implement GraniteDoclingLoader** (High Risk)
   - *Goal*: Use Docling to ingest PDFs, converting visuals to text/markdown.
   - *Dependencies*: C.1 (Sprint 2)
-- **[C.2] Implement Retrieval Metric Tests**
+- [x] **[C.2] Implement Retrieval Metric Tests**
   - *Goal*: Automated tests for retrieval quality (Hit Rate, MRR).
   - *Dependencies*: C.1 (Sprint 2)
 - **[C.3] Implement Generation Metric Tests**
