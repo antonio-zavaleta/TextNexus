@@ -92,7 +92,7 @@ TextNexus/
 ├── LICENSE                 # Project License (MIT)
 ├── pyproject.toml        # Poetry dependencies and project metadata
 ├── poetry.lock
-├── auto_rag/
+├── textnexus/
 │   ├── __init__.py
 │   ├── core/               # Core components (often wrapped for LangChain)
 │   │   ├── __init__.py
@@ -170,7 +170,7 @@ TextNexus/
 
 The `SQLiteVectorStore` is the concrete implementation of our vector storage for local development.
 
-* **File:** `auto_rag/core/storage.py`
+* **File:** `textnexus/core/storage.py`
 * **Dependencies:**
     * It requires an instance of a `BaseEmbeddingModel` to be injected during initialization.
     * It relies on the `sqlite-vss` Python package and the `numpy` package.

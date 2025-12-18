@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch, ANY
 from io import BytesIO
 
 from langchain_core.documents import Document
-from auto_rag.core.ingestion import MinioPDFLoader
+from textnexus.core.ingestion import MinioPDFLoader
 
 # We need this to simulate the object returned by the real minio client
 class MockMinioObject:
@@ -25,9 +25,9 @@ def mock_minio_client(mocker):
     """A pytest fixture to create a mocked MinIO client and config."""
     # --- FIX: Mock the config variables ---
     # This prevents the ValueError from being raised during initialization
-    mocker.patch("auto_rag.config.MINIO_ENDPOINT", "mock-endpoint")
-    mocker.patch("auto_rag.config.MINIO_ACCESS_KEY", "mock-access-key")
-    mocker.patch("auto_rag.config.MINIO_SECRET_KEY", "mock-secret-key")
+    mocker.patch("textnexus.config.MINIO_ENDPOINT", "mock-endpoint")
+    mocker.patch("textnexus.config.MINIO_ACCESS_KEY", "mock-access-key")
+    mocker.patch("textnexus.config.MINIO_SECRET_KEY", "mock-secret-key")
 
     # Create a mock instance of the Minio client
     mock_client = MagicMock()
@@ -42,8 +42,8 @@ def mock_minio_client(mocker):
     mock_client.get_object.return_value = MockMinioObject(mock_pdf_data)
 
     # Use mocker.patch to replace the real Minio class with our mock instance
-    # whenever it's called within the 'auto_rag.core.ingestion' module.
-    mocker.patch("auto_rag.core.ingestion.Minio", return_value=mock_client)
+    # whenever it's called within the 'textnexus.core.ingestion' module.
+    mocker.patch("textnexus.core.ingestion.Minio", return_value=mock_client)
     return mock_client
 
 @pytest.fixture
@@ -58,7 +58,7 @@ def mock_pypdf_loader(mocker):
     mock_instance.load.return_value = expected_docs
 
     # Patch the PyPDFLoader class itself. When called, it will return our mock_instance.
-    mock_class = mocker.patch("auto_rag.core.ingestion.PyPDFLoader", return_value=mock_instance)
+    mock_class = mocker.patch("textnexus.core.ingestion.PyPDFLoader", return_value=mock_instance)
     
     # Return the mock *class* so we can make assertions on it.
     return mock_class

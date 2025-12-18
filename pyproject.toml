@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "auto-rag"
+name = "textnexus"
 version = "0.1.0"
 description = "A modular Python CLI tool to create and run RAG pipelines for PDFs."
 authors = ["Antonio Zavaleta <antonio.zavaleta@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "auto_rag"}]
+packages = [{include = "textnexus"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -25,7 +25,7 @@ ollama = "^0.5.3"
 codecarbon = "^3.2.0"
 
 [tool.poetry.scripts]
-textnexus = "auto_rag.cli:app"
+textnexus = "textnexus.cli:app"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.2"

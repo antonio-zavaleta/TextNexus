@@ -35,7 +35,7 @@ class SentenceTransformerModel(BaseEmbeddingModel):
     Hugging Face SentenceTransformers model.
     """
 
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2", device: str = None):
         """
         Initializes the SentenceTransformerModel.
 
@@ -45,8 +45,11 @@ class SentenceTransformerModel(BaseEmbeddingModel):
         Args:
             model_name (str): The name of the SentenceTransformers model
                               to use from Hugging Face.
+            device (str): Device to run the model on ('cpu', 'cuda', etc.). 
+                          If None, it will be automatically selected.
         """
         self.model_name = model_name
+        self.device = device
         self.model = None  # Lazy load the model
         logger.info(f"SentenceTransformerModel initialized with model '{self.model_name}'.")
 
@@ -54,10 +57,10 @@ class SentenceTransformerModel(BaseEmbeddingModel):
         """Loads the model into memory. This is done on the first use."""
         if self.model is None:
             try:
-                logger.info(f"Lazy loading SentenceTransformers model: '{self.model_name}'...")
+                logger.info(f"Lazy loading SentenceTransformers model: '{self.model_name}' on device '{self.device}'...")
                 # The sentence_transformers library is heavy, so we import it here.
                 from sentence_transformers import SentenceTransformer
-                self.model = SentenceTransformer(self.model_name)
+                self.model = SentenceTransformer(self.model_name, device=self.device)
                 logger.info("Model loaded successfully.")
             except ImportError:
                 logger.error("The 'sentence-transformers' package is not installed. Please install it with 'poetry add sentence-transformers'.")

@@ -11,9 +11,9 @@ from langsmith import traceable
 
 
 # Import our configuration from the config.py file
-from auto_rag import config
+from textnexus import config
 # Import our new preprocessor
-from auto_rag.core.preprocessing import BasicTextCleaner
+from textnexus.core.preprocessing import BasicTextCleaner
 
 
 # Get a logger instance for this module

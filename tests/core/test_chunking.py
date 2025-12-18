@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock
 from langchain_core.documents import Document
-from auto_rag.core.embedding import BaseEmbeddingModel
-from auto_rag.core.chunking import SemanticTextSplitter
+from textnexus.core.embedding import BaseEmbeddingModel
+from textnexus.core.chunking import SemanticTextSplitter
 
 @pytest.fixture
 def mock_embedding_model():
@@ -44,7 +44,7 @@ def test_semantic_splitter_creates_correct_chunks(mock_embedding_model, mocker):
         "Sentence four is similar.",
         "Sentence five is the last one."
     ]
-    mocker.patch("auto_rag.core.chunking.nltk.sent_tokenize", return_value=mock_sentences)
+    mocker.patch("textnexus.core.chunking.nltk.sent_tokenize", return_value=mock_sentences)
 
 
     # 2. Execution
@@ -64,7 +64,7 @@ def test_semantic_splitter_handles_empty_document(mock_embedding_model, mocker):
     doc = Document(page_content="", metadata={"source": "empty.pdf"})
     
     # Mock the tokenizer to return an empty list for empty text
-    mocker.patch("auto_rag.core.chunking.nltk.sent_tokenize", return_value=[])
+    mocker.patch("textnexus.core.chunking.nltk.sent_tokenize", return_value=[])
     
     chunks = splitter.split_documents([doc])
     
@@ -76,7 +76,7 @@ def test_semantic_splitter_handles_single_sentence(mock_embedding_model, mocker)
     doc = Document(page_content="This is a single sentence.", metadata={"source": "single.pdf"})
     
     # Mock the tokenizer to return a single sentence
-    mocker.patch("auto_rag.core.chunking.nltk.sent_tokenize", return_value=["This is a single sentence."])
+    mocker.patch("textnexus.core.chunking.nltk.sent_tokenize", return_value=["This is a single sentence."])
     
     # --- THE FIX IS HERE ---
     # Explicitly re-configure the mock to return only one vector for this specific test.

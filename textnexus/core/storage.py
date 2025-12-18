@@ -7,8 +7,8 @@ import numpy as np
 
 from langchain_core.documents import Document
 
-from auto_rag.core.embedding import BaseEmbeddingModel
-from auto_rag import config
+from textnexus.core.embedding import BaseEmbeddingModel
+from textnexus import config
 
 logger = logging.getLogger(__name__)
 

@@ -1,11 +1,11 @@
 import typer
 from rich.console import Console
-from auto_rag.commands.index import app as index_app
-from auto_rag.commands.query import query
-from auto_rag.commands.generate import generate
-from auto_rag.core.embedding import SentenceTransformerModel
-from auto_rag.core.storage import SQLiteVectorStore
-from auto_rag import config
+from textnexus.commands.index import app as index_app
+from textnexus.commands.query import query
+from textnexus.commands.generate import generate
+from textnexus.core.embedding import SentenceTransformerModel
+from textnexus.core.storage import SQLiteVectorStore
+from textnexus import config
 
 app = typer.Typer()
 console = Console()

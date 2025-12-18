@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import Mock, MagicMock
 
 # FAILING IMPORT: This module does not exist yet
-from auto_rag.core.ingestion_pipeline import IngestionPipeline
+from textnexus.core.ingestion_pipeline import IngestionPipeline
 
 def test_ingestion_pipeline_initialization():
     """Verify the pipeline initializes with required components."""

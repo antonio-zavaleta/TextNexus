@@ -29,10 +29,10 @@ We will follow a strict **TDD by User Story** workflow for each item in the Spri
 - [x] **[D.1] Refactor Ingestion Pipeline to API**
   - *Goal*: Extract `IngestionPipeline` as a reusable class.
   - *Dependencies*: None
-- **[D.2] Refactor Query Engine to API**
+- [x] **[D.2] Refactor Query Engine to API**
   - *Goal*: Extract `QueryEngine` as a reusable class.
   - *Dependencies*: None
-- **[D.3] Create Client Interface Package**
+- [x] **[D.3] Create Client Interface Package**
   - *Goal*: Create a top-level `textnexus` package and `init` file.
   - *Dependencies*: D.1, D.2
 

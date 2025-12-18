@@ -1,6 +1,6 @@
 import typer
 from rich.console import Console
-from auto_rag.llm.connector_registry import LLM_CONNECTORS
+from textnexus.llm.connector_registry import LLM_CONNECTORS
 
 import logging
 
@@ -33,7 +33,7 @@ def generate(
         None. Prints the generated response to the console.
     """
     try:
-        from auto_rag.core.query_engine import QueryEngine
+        from textnexus.core.query_engine import QueryEngine
         console.rule(f"[bold green]RAG Generation: '{query_text}'[/bold green]")
 
         connector_class = LLM_CONNECTORS.get(model)

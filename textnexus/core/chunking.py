@@ -6,7 +6,7 @@ import nltk
 from langchain_core.documents import Document
 from sklearn.metrics.pairwise import cosine_similarity
 
-from auto_rag.core.embedding import BaseEmbeddingModel
+from textnexus.core.embedding import BaseEmbeddingModel
 
 # Get a logger instance for this module
 logger = logging.getLogger(__name__)

@@ -2,8 +2,8 @@ import pytest
 from langchain_core.documents import Document
 
 # Import the real components we want to test together
-from auto_rag.core.embedding import SentenceTransformerModel
-from auto_rag.core.storage import SQLiteVectorStore
+from textnexus.core.embedding import SentenceTransformerModel
+from textnexus.core.storage import SQLiteVectorStore
 
 @pytest.mark.integration
 def test_sqlite_vector_store_integration(tmp_path):
@@ -21,7 +21,7 @@ def test_sqlite_vector_store_integration(tmp_path):
     db_path = tmp_path / "test_vector_store.db"
     
     # Instantiate the real components
-    embedding_model = SentenceTransformerModel()
+    embedding_model = SentenceTransformerModel(device="cpu")
     vector_store = SQLiteVectorStore(db_path=str(db_path), embedding_model=embedding_model)
 
     # 2. Add Documents: Add two distinct documents to the store

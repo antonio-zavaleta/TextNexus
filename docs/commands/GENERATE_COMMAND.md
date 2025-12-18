@@ -17,7 +17,7 @@ To use the generate command, ensure you have Ollama installed and configured (se
 
 ## Usage
 ```bash
-python -m auto_rag.cli generate "Your question here" [OPTIONS]
+python -m textnexus.cli generate "Your question here" [OPTIONS]
 ```
 
 ### Arguments
@@ -31,17 +31,17 @@ python -m auto_rag.cli generate "Your question here" [OPTIONS]
 
 ### Basic Usage
 ```bash
-python -m auto_rag.cli generate "What is deep learning?"
+python -m textnexus.cli generate "What is deep learning?"
 ```
 
 ### Specifying the Model Explicitly
 ```bash
-python -m auto_rag.cli generate "Explain neural networks" --model llama3
+python -m textnexus.cli generate "Explain neural networks" --model llama3
 ```
 
 ### Adjusting Context Size
 ```bash
-python -m auto_rag.cli generate "Describe transformer architecture" --top-k 5
+python -m textnexus.cli generate "Describe transformer architecture" --top-k 5
 ```
 
 ## How It Works
