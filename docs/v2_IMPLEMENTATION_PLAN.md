@@ -47,7 +47,7 @@ We will follow a strict **TDD by User Story** workflow for each item in the Spri
 
 ### Sprint 3: Ingestion Core & Metrics
 **Focus**: Implementing the new visual-aware ingestion pipeline and setting up evaluation metrics.
-- **[A.1] Implement GraniteDoclingLoader** (High Risk)
+- [x] **[A.1] Implement GraniteDoclingLoader** (High Risk)
   - *Goal*: Use Docling to ingest PDFs, converting visuals to text/markdown.
   - *Dependencies*: C.1 (Sprint 2)
 - **[C.2] Implement Retrieval Metric Tests**
@@ -74,6 +74,15 @@ We will follow a strict **TDD by User Story** workflow for each item in the Spri
 - **[B.3] Update query and generate CLIs**
   - *Goal*: Expose hybrid search options in the query/generate commands.
   - *Dependencies*: B.2 (Sprint 5)
+
+### Sprint 6: Evaluation & Benchmarking
+**Focus**: Objective comparison of system performance.
+- **[E.1] Create Evaluation Pipeline**
+  - *Goal*: Build a script to run RAGAS metrics (Faithfulness, Answer Relevance) against the Golden Dataset.
+  - *Dependencies*: C.1 (Dataset)
+- **[E.2] Comparative Benchmark (V1 vs V2)**
+  - *Goal*: Run A/B test (PyPDF+Dense vs Docling+Hybrid) and report metric deltas.
+  - *Dependencies*: E.1, A.1 (Docling), B.2 (Hybrid)
 
 ## Verification Plan
 
