@@ -38,7 +38,7 @@ We will follow a strict **TDD by User Story** workflow for each item in the Spri
 
 ### Sprint 2: Foundation & Storage
 **Focus**: Establishing test baselines and updating storage for sparse vectors.
-- **[C.1] Create Standardized Test Dataset** (High Risk)
+- [x] **[C.1] Create Standardized Test Dataset** (High Risk)
   - *Goal*: Create a ground-truth dataset with table/image-specific questions.
   - *Dependencies*: None
 - **[B.1] Integrate Sparse Indexing with Storage**
