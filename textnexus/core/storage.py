@@ -47,19 +47,30 @@ class SQLiteVectorStore(BaseVectorStore):
                 self.conn.rollback()
             raise
 
-    def add_documents(self, documents: List[Document]) -> None:
+    def add_documents(self, documents: List[Document], sparse_vectors: List[dict] = None) -> None:
         if not documents:
             return
+
+        # Validation: Check if sparse_vectors length matches documents
+        if sparse_vectors is not None:
+            if len(sparse_vectors) != len(documents):
+                raise ValueError(f"Number of sparse vectors ({len(sparse_vectors)}) does not match number of documents ({len(documents)}).")
+        else:
+            # If no sparse vectors provided, fill with None/Null
+            sparse_vectors = [None] * len(documents)
 
         texts_to_embed = [doc.page_content for doc in documents]
         embeddings = self.embedding_model.create_embeddings(texts_to_embed)
 
         cursor = self.conn.cursor()
         try:
-            for doc, embedding in zip(documents, embeddings):
+            for doc, embedding, sparse in zip(documents, embeddings, sparse_vectors):
+                # Serialize sparse vector to JSON if present
+                sparse_json = json.dumps(sparse) if sparse is not None else None
+                
                 cursor.execute(
-                    "INSERT INTO chunks (content, metadata) VALUES (?, ?)",
-                    (doc.page_content, json.dumps(doc.metadata))
+                    "INSERT INTO chunks (content, metadata, sparse_vector) VALUES (?, ?, ?)",
+                    (doc.page_content, json.dumps(doc.metadata), sparse_json)
                 )
                 chunk_id = cursor.lastrowid
                 

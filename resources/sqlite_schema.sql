@@ -4,7 +4,8 @@
 CREATE TABLE IF NOT EXISTS chunks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT NOT NULL,
-    metadata TEXT -- Storing metadata as a JSON string
+    metadata TEXT, -- Storing metadata as a JSON string
+    sparse_vector TEXT -- Storing sparse vector as a JSON string (e.g. BM25)
 );
 
 -- Virtual table using the sqlite-vss extension to store and index the vector embeddings.
