@@ -53,9 +53,10 @@ We will follow a strict **TDD by User Story** workflow for each item in the Spri
 - [x] **[C.2] Implement Retrieval Metric Tests**
   - *Goal*: Automated tests for retrieval quality (Hit Rate, MRR).
   - *Dependencies*: C.1 (Sprint 2)
-- **[C.3] Implement Generation Metric Tests**
+- [x] **[C.3] Implement Generation Metric Tests**
   - *Goal*: Automated tests for answer quality using LLM-as-a-judge.
   - *Dependencies*: C.1 (Sprint 2)
+  - *Note*: Gemini Judge temporarily disabled due to API errors (404). Ollama (default) and OpenAI are functional.
 
 ### Sprint 4: Advanced Ingestion
 **Focus**: refining how we split documents and exposing options in the CLI.

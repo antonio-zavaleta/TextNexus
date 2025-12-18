@@ -24,6 +24,8 @@ numpy = "^1.26.4"
 ollama = "^0.5.3"
 codecarbon = "^3.2.0"
 docling = "^2.65.0"
+langchain-openai = "^0.1"
+langchain-google-genai = "^1.0"
 
 [tool.poetry.scripts]
 textnexus = "textnexus.cli:app"
