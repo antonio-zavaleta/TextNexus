@@ -38,7 +38,26 @@ Before using any commands, ensure:
 
 ## 🚀 Quick Start
 
-After installation and MinIO setup, try these commands to see TextNexus in action:
+After installation and MinIO setup, you can use TextNexus via the CLI or directly in Python.
+
+### 🐍 Python API
+
+```python
+import textnexus
+
+# 1. Initialize
+pipeline = textnexus.IngestionPipeline()
+engine = textnexus.QueryEngine(
+    vector_store=..., 
+    embedding_model=...
+)
+
+# 2. Run
+response = engine.query("What is the architecture?", top_k=3)
+print(response["results"])
+```
+
+### 🖥️ CLI Commands
 
 1. **Index your first documents:**
 ```sh

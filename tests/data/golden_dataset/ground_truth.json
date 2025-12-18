@@ -1,0 +1,77 @@
+[
+    {
+        "id": "q1_text",
+        "question": "What is the primary innovation introduced in the 'Attention Is All You Need' paper?",
+        "ground_truth_answer": "The primary innovation is the Transformer architecture, which relies entirely on self-attention mechanisms to compute representations of its input and output, eschewing the use of sequence-aligned RNNs or convolution.",
+        "ground_truth_context_files": [
+            "attention_is_all_you_need.pdf"
+        ],
+        "metadata": {
+            "type": "text",
+            "difficulty": "medium",
+            "page_reference": [
+                1
+            ]
+        }
+    },
+    {
+        "id": "q2_image",
+        "question": "Based on the model architecture diagram (Figure 1), what two sub-layers does each layer in the encoder consist of?",
+        "ground_truth_answer": "Each layer in the encoder consists of a multi-head self-attention mechanism and a position-wise fully connected feed-forward network. Both are followed by residual connections and layer normalization.",
+        "ground_truth_context_files": [
+            "attention_is_all_you_need.pdf"
+        ],
+        "metadata": {
+            "type": "image",
+            "description": "Requires understanding Figure 1 structure",
+            "page_reference": [
+                2
+            ]
+        }
+    },
+    {
+        "id": "q3_text",
+        "question": "What is 'Scaled Dot-Product Attention'?",
+        "ground_truth_answer": "Scaled Dot-Product Attention computes the attention function on a set of queries, keys, and values. It outputs a weighted sum of the values, where the weights are computed by the softmax of the dot product of the query with all keys, scaled by 1/sqrt(d_k).",
+        "ground_truth_context_files": [
+            "attention_is_all_you_need.pdf"
+        ],
+        "metadata": {
+            "type": "text",
+            "difficulty": "medium",
+            "page_reference": [
+                3
+            ]
+        }
+    },
+    {
+        "id": "q4_table",
+        "question": "According to Table 3 (Variations on the Transformer), what is the dimensionality (d_model) of the 'Transformer-Big' model?",
+        "ground_truth_answer": "The 'Transformer-Big' model has a dimensionality (d_model) of 1024.",
+        "ground_truth_context_files": [
+            "attention_is_all_you_need.pdf"
+        ],
+        "metadata": {
+            "type": "table",
+            "description": "Requires data extraction from Table 3",
+            "page_reference": [
+                8
+            ]
+        }
+    },
+    {
+        "id": "q5_table",
+        "question": "Referring to Table 4, what BLEU score did the 'Transformer (big)' model achieve on the WMT 2014 English-to-German translation task?",
+        "ground_truth_answer": "In Table 4, the 'Transformer (big)' model achieved a BLEU score of 28.4 on the WMT 2014 English-to-German translation task.",
+        "ground_truth_context_files": [
+            "attention_is_all_you_need.pdf"
+        ],
+        "metadata": {
+            "type": "table",
+            "description": "Requires data extraction from Table 4 (Results)",
+            "page_reference": [
+                8
+            ]
+        }
+    }
+]
