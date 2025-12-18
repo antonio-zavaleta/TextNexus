@@ -41,8 +41,8 @@ We will follow a strict **TDD by User Story** workflow for each item in the Spri
 - [x] **[C.1] Create Standardized Test Dataset** (High Risk)
   - *Goal*: Create a ground-truth dataset with table/image-specific questions.
   - *Dependencies*: None
-- **[B.1] Integrate Sparse Indexing with Storage**
-  - *Goal*: Update SQLite store to handle sparse vectors (Splade/BM25).
+- [x] **[B.1] Integrate Sparse Indexing with Storage**
+  - *Goal*: Update SQLite schema for sparse vectors.
   - *Dependencies*: None
 
 ### Sprint 3: Ingestion Core & Metrics
